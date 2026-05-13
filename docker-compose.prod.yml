@@ -1,0 +1,15 @@
+services:
+  nextjs:
+    image: ghcr.io/oppenheimor/project-todo-nextjs:latest
+    container_name: project-todo-nextjs
+    restart: always
+    networks:
+      - app-network
+    env_file:
+      - .env
+    environment:
+      - NODE_ENV=production
+
+networks:
+  app-network:
+    external: true
