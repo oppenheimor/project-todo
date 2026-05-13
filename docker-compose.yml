@@ -1,0 +1,27 @@
+services:
+  nextjs:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - DATABASE_URL=postgresql://heqi_app:Mj2u26vaYMfs@postgres:5432/project_a?sslmode=disable
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: heqi_app
+      POSTGRES_PASSWORD: Mj2u26vaYMfs
+      POSTGRES_DB: project_a
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U heqi_app -d project_a"]
+      interval: 3s
+      retries: 5
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:
